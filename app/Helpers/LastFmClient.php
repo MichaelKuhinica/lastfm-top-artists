@@ -3,7 +3,6 @@
 namespace app\Helpers;
 
 use App\Helpers\Contracts\LastFmClientContract;
-use GuzzleHttp\Client;
 
 class LastFmClient implements LastFmClientContract
 {
@@ -11,9 +10,9 @@ class LastFmClient implements LastFmClientContract
   protected $config;
   protected $client;
 
-  public function __construct($config) {
+  public function __construct($config, \GuzzleHttp\Client $client) {
     $this->config = $config;
-    $this->client = new Client($this->config);
+    $this->client = $client;
   }
 
   private function buildBaseQuery($parameters) {

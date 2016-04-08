@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use App\Helpers\LastFmClient;
+use GuzzleHttp\Client;
 
 class LastFmServiceProvider extends ServiceProvider
 {
@@ -25,7 +26,7 @@ class LastFmServiceProvider extends ServiceProvider
     {
       $this->app->singleton('App\Helpers\Contracts\LastFmClientContract', function(){
         $config = isset($this->app['config']['app']['lastfm']) ? $this->app['config']['app']['lastfm'] : [];
-        return new LastFmClient($config);
+        return new LastFmClient($config, new \GuzzleHttp\Client($config));
       });
     }
 
