@@ -8,6 +8,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use GuzzleHttp\Exception\RequestException;
 
 class Handler extends ExceptionHandler
 {
@@ -45,6 +46,13 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
+      if($e instanceof RequestException) {
+        if ($e->hasResponse()) {
+          $body = $e->getResponse()->getBody()->getContents();
+          $response = new \SimpleXMLElement($body);
+          return response()->json($response);
+        }
+      }
         return parent::render($request, $e);
     }
 }
