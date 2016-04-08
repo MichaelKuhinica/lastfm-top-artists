@@ -16,7 +16,7 @@ class TrackController extends Controller
      * @return Response
      */
     public function topByArtist(Request $request, LastFmClientContract $lastFm, $artist) {
-      $page = $request->input('page') || 1;
+      $page = $request->input('page') ?: 1;
       $response = $lastFm->topTracksByArtist($artist, $page);
       return response()->json($response);
     }

@@ -16,7 +16,7 @@ class ArtistController extends Controller
      * @return Response
      */
     public function topByCountry(Request $request, LastFmClientContract $lastFm, $country) {
-      $page = $request->input('page') || 1;
+      $page = $request->input('page') ?: 1;
       $response = $lastFm->topArtistsByCountry($country, $page);
       return response()->json($response);
     }

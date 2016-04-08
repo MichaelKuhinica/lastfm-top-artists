@@ -41,7 +41,7 @@ class LastFmClient implements LastFmClientContract
       'query' => $this->buildBaseQuery([
         'method' => 'geo.gettopartists',
         'country' => $country,
-        'page' => $page || 1,
+        'page' => $page,
       ])
     ]);
     $artists = new \SimpleXMLElement($response->getBody()->getContents());
@@ -63,7 +63,7 @@ class LastFmClient implements LastFmClientContract
       'query' => $this->buildBaseQuery([
         'method' => 'artist.getTopTracks',
         'mbid' => $artist_mbid,
-        'page' => $page || 1,
+        'page' => $page,
       ])
     ]);
     $tracks = new \SimpleXMLElement($response->getBody()->getContents());

@@ -8,6 +8,27 @@ class LastFmClientTest extends TestCase
 {
     /**
      * Test top artists by country with success, it should build
+     * the query_string correctly when navigating to another page
+     *
+     * @return void
+     */
+    public function testTopArtistsByCountriesPageTwoWithSuccess()
+    {
+      $mockedStack = [
+        new Response(200, [], $this->sample_response_success)
+      ];
+      $client = $this->mockGuzzleClient($mockedStack);
+      $lastFmClient = new LastFmClient($this->mockedGuzzleConfig(), $client);
+      $lastFmClient->topArtistsByCountry('brazil', 2);
+      $this->assertEquals(count($this->request_history), 1);
+      $transaction = $this->request_history[0];
+      $request = $transaction['request'];
+
+      $this->assertEquals($request->getUri()->getQuery(), 'limit=5&api_key=mocked&method=geo.gettopartists&country=brazil&page=2');
+    }
+
+    /**
+     * Test top artists by country with success, it should build
      * the query_string correctly
      *
      * @return void
@@ -19,7 +40,7 @@ class LastFmClientTest extends TestCase
       ];
       $client = $this->mockGuzzleClient($mockedStack);
       $lastFmClient = new LastFmClient($this->mockedGuzzleConfig(), $client);
-      $lastFmClient->topArtistsByCountry('brazil');
+      $lastFmClient->topArtistsByCountry('brazil', 1);
       $this->assertEquals(count($this->request_history), 1);
       $transaction = $this->request_history[0];
       $request = $transaction['request'];
@@ -43,6 +64,28 @@ class LastFmClientTest extends TestCase
       $this->setExpectedException(RequestException::class);
       $lastFmClient->topArtistsByCountry('lalala');
     }
+
+    /**
+     * Test top tracks by artist with success, it should build
+     * the query_string correctly when navigating to page 2
+     *
+     * @return void
+     */
+    public function testTopTracksByArtistOnPageTwoWithSuccess() {
+      $mockedStack = [
+        new Response(200, [], $this->sample_response_success)
+      ];
+      $client = $this->mockGuzzleClient($mockedStack);
+      $lastFmClient = new LastFmClient($this->mockedGuzzleConfig(), $client);
+      $lastFmClient->topTracksByArtist('db36a76f-4cdf-43ac-8cd0-5e48092d2bae', 2);
+      $this->assertEquals(count($this->request_history), 1);
+      $transaction = $this->request_history[0];
+      $request = $transaction['request'];
+
+      $this->assertEquals($request->getUri()->getQuery(), 'limit=5&api_key=mocked&method=artist.getTopTracks&mbid=db36a76f-4cdf-43ac-8cd0-5e48092d2bae&page=2');
+    }
+
+
 
     /**
      * Test top tracks by artist with success, it should build
