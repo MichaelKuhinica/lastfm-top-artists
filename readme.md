@@ -1,27 +1,23 @@
-# Laravel PHP Framework
+# Last.fm top artists
 
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
-[![Total Downloads](https://poser.pugx.org/laravel/framework/d/total.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
+Lists the most popular artists on Last.fm by country in response to user searches.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, queueing, and caching.
+- The user should be able to enter a keyword (country name), which is then used to search Last.fm via their REST API.
+- The search results should be paginated and displayed as five results per page, and the user should be able to navigate to other pages.
+- Each result should be displayed as the name of the band and a thumbnail of the band; clicking on the thumbnail should open a new page which shows the Artist Top Tracks.
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
+## Setup Instructions
 
-## Official Documentation
+This application is build using [Laravel](http://laravel.com), The PHP Framework For Web Artisans.
 
-Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
+Laravel uses [Composer](https://getcomposer.org) for dependency management, you must install it to build the project.
 
-## Contributing
+### Install Composer (OSX with Homebrew)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+Install the package with `brew install homebrew/php/composer`.
 
-## Security Vulnerabilities
+Add Composer's executables path `~/.composer/vendor/bin` to your environment `PATH`.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+### Install dependencies
 
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+Run `composer install` from the project root directory to install dependencies.
