@@ -112,6 +112,21 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | LastFm Api Configuration
+    |--------------------------------------------------------------------------
+    |
+    | The api key should beconfigured on your local environment
+    | configuration file
+    |
+    */
+
+    'lastfm' => [
+      'base_uri' => 'http://ws.audioscrobbler.com/2.0/',
+      'api_key' => env('LAST_FM_API_KEY', null)
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Autoloaded Service Providers
     |--------------------------------------------------------------------------
     |
@@ -155,6 +170,7 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\LastFmServiceProvider::class,
 
     ],
 
