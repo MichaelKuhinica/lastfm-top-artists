@@ -44,6 +44,42 @@ class LastFmClientTest extends TestCase
       $lastFmClient->topArtistsByCountry('lalala');
     }
 
+    /**
+     * Test top tracks by artist with success, it should build
+     * the query_string correctly
+     *
+     * @return void
+     */
+    public function testTopTracksByArtistWithSuccess() {
+      $mockedStack = [
+        new Response(200, [], $this->sample_response_success)
+      ];
+      $client = $this->mockGuzzleClient($mockedStack);
+      $lastFmClient = new LastFmClient($this->mockedGuzzleConfig(), $client);
+      $lastFmClient->topTracksByArtist('db36a76f-4cdf-43ac-8cd0-5e48092d2bae');
+      $this->assertEquals(count($this->request_history), 1);
+      $transaction = $this->request_history[0];
+      $request = $transaction['request'];
+
+      $this->assertEquals($request->getUri()->getQuery(), 'limit=5&api_key=mocked&method=artist.getTopTracks&mbid=db36a76f-4cdf-43ac-8cd0-5e48092d2bae&page=1');
+    }
+
+    /**
+     * Test top tracks by artist with 400 bad request,
+     * it should raise an exception
+     *
+     * @return void
+     */
+    public function testTopTracksByArtistWithBadRequest()
+    {
+      $mockedStack = [
+        new Response(400, [], $this->sample_response_error)
+      ];
+      $client = $this->mockGuzzleClient($mockedStack);
+      $lastFmClient = new LastFmClient($this->mockedGuzzleConfig(), $client);
+      $this->setExpectedException(RequestException::class);
+      $lastFmClient->topTracksByArtist('banana');
+    }
 
     private $sample_response_error = <<<XML
 <?xml version="1.0" encoding="UTF-8" ?>
