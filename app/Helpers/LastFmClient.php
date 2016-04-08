@@ -25,6 +25,17 @@ class LastFmClient implements LastFmClientContract
     );
   }
 
+  /**
+   * Query LastFm api to return a list with the top 5 artists in the supplied
+   * country with pagination
+   *
+   * @param string $country A country name, as defined by the ISO 3166-1
+   * country names standard
+   * @param int $page the page you wish to require, defaults to 1
+   * @return array list of artists and pagination information
+   * @throws GuzzleHttp\Exception\RequestException in case of connectivity error
+   * @throws GuzzleHttp\Exception\ClientException in case of request error
+   */
   public function topArtistsByCountry($country, $page = 1) {
     $response = $this->client->request('GET', '', [
       'query' => $this->buildBaseQuery([
@@ -37,7 +48,26 @@ class LastFmClient implements LastFmClientContract
     return $artists;
   }
 
-  public function topTracksByArtist($artist, $page = 1) {
+  /**
+   * Query LastFm api to return a list with the top tracks for the specified
+   * artist id
+   *
+   * @param string $artist_mbid The musicbrainz id for the artist
+   * @param int $page the page you wish to require, defaults to 1
+   * @return array list of tracks and pagination information
+   * @throws GuzzleHttp\Exception\RequestException in case of connectivity error
+   * @throws GuzzleHttp\Exception\ClientException in case of request error
+   */
+  public function topTracksByArtist($artist_mbid, $page = 1) {
+    $response = $this->client->request('GET', '', [
+      'query' => $this->buildBaseQuery([
+        'method' => 'artist.getTopTracks',
+        'mbid' => $artist_mbid,
+        'page' => $page || 1,
+      ])
+    ]);
+    $tracks = new \SimpleXMLElement($response->getBody()->getContents());
+    return $tracks;
   }
 
 }
