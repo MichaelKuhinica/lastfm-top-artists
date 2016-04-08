@@ -21,3 +21,15 @@ Add Composer's executables path `~/.composer/vendor/bin` to your environment `PA
 ### Install dependencies
 
 Run `composer install` from the project root directory to install dependencies.
+
+### Configure Application
+
+- Copy the file `.env.example` to `.env`
+- Run `php artisan key:generate` to set a random string on `APP_KEY`
+- Fill `LAST_FM_API_KEY` with your valid LastFm key
+
+## Testing
+
+Laravel uses phpunit as a test suit. Ensure you have the `phpunit` binary in your environment path and run it from the project root directory to run the test cases.
+
+
