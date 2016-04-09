@@ -260,7 +260,8 @@ var TrackView = React.createClass({
 var TracksList = React.createClass({
   getInitialState: function() {
     return {
-      data: []
+      data: [],
+      loaded: false
     }
   },
   componentDidMount: function() {
@@ -279,6 +280,7 @@ var TracksList = React.createClass({
         this.setState({
           data: data.toptracks.track,
           total: data.toptracks['@attributes'].total,
+          loaded: true
         });
       }.bind(this),
       error: function(xhr, status, err) {
@@ -286,6 +288,7 @@ var TracksList = React.createClass({
         if(xhr.responseJSON && xhr.responseJSON.error) {
           errorText = xhr.responseJSON.error;
         }
+        this.setState({loaded: true});
         alert('Error loading tracks: '+errorText);
       }.bind(this)
     });
@@ -308,23 +311,25 @@ var TracksList = React.createClass({
     var boundClick = this.previousPage;
     return (
       <div className="tracksList">
-        <div className="row">
-          <a onClick={boundClick} href="#">
-            Back
-          </a>
-        </div>
-        <div className="row">
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Top Songs by {this.getArtistName()}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {tracks}
-            </tbody>
-          </table>
-        </div>
+        <Loader loaded={this.state.loaded}>
+          <div className="row">
+            <a onClick={boundClick} href="#">
+              Back
+            </a>
+          </div>
+          <div className="row">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Top Songs by {this.getArtistName()}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {tracks}
+              </tbody>
+            </table>
+          </div>
+        </Loader>
       </div>
     )
   }
