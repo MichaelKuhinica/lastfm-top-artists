@@ -68,8 +68,12 @@ var ArtistsList = React.createClass({
   },
   loadArtists: function(props) {
     if(props.params.country) {
+      let endpointUrl = '/api/v1/artists/top/'+props.params.country;
+      if(props.params.page) {
+        endpointUrl += '/?page='+props.params.page;
+      }
       $.ajax({
-        url: '/api/v1/artists/top/'+props.params.country,
+        url: endpointUrl,
         dataType: 'json',
         cache: true,
         success: function(data) {
@@ -117,7 +121,7 @@ var ArtistView = React.createClass({
 ReactDOM.render((
   <Router history={browserHistory}>
     <Route path="/" component={CountryFilter}>
-      <Route path="/artists/:country" component={ArtistsList}/>
+      <Route path="/artists/:country(/:page)" component={ArtistsList}/>
     </Route>
   </Router>
 ), document.getElementById('app'));
