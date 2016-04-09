@@ -85,8 +85,6 @@ class LastFmClientTest extends TestCase
       $this->assertEquals($request->getUri()->getQuery(), 'limit=5&api_key=mocked&method=artist.getTopTracks&mbid=db36a76f-4cdf-43ac-8cd0-5e48092d2bae&page=2');
     }
 
-
-
     /**
      * Test top tracks by artist with success, it should build
      * the query_string correctly
