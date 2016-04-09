@@ -50,7 +50,7 @@ class Handler extends ExceptionHandler
         if ($e->hasResponse()) {
           $body = $e->getResponse()->getBody()->getContents();
           $response = new \SimpleXMLElement($body);
-          return response()->json($response);
+          return \Response::json($response, $e->getResponse()->getStatusCode());
         }
       }
         return parent::render($request, $e);
