@@ -5,7 +5,6 @@ var Router = ReactRouter.Router;
 var Route = ReactRouter.Route;
 var browserHistory = ReactRouter.browserHistory;
 
-// console.log(countries.getNames());
 var FilterContainer = React.createClass({
   render: function() {
     return (
@@ -59,7 +58,6 @@ var ArtistsList = React.createClass({
     return {data: []};
   },
   componentDidMount: function() {
-    console.log(this.props.params);
     if(this.props.params.country) {
       //TODO use promise
       this.loadArtists(this.props.params.country);
@@ -71,7 +69,6 @@ var ArtistsList = React.createClass({
       dataType: 'json',
       cache: true,
       success: function(data) {
-        console.log(data);
         this.setState({data: data.topartists.artist});
       }.bind(this),
       error: function(xhr, status, err) {
