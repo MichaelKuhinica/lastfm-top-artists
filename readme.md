@@ -23,7 +23,7 @@ Add Composer's executables path `~/.composer/vendor/bin` to your environment `PA
 
 ### Install node (OSX)
 
-Download and install package from [their website](https://nodejs.org/en/). Node comes bundeled with npm, used for managing frontend dependencies.
+Download and install package from [their website](https://nodejs.org/en/). Node comes bundled with npm, used for managing frontend dependencies.
 
 ### Install Gulp
 
@@ -72,3 +72,17 @@ gulp watch
 ## Testing
 
 Laravel uses phpunit as a test suit. Ensure you have the `phpunit` binary in your environment path and execute it from the project root directory to run the test cases.
+
+# TODO
+
+- Use promises instead of raw ajax calls
+- Frontend tests
+- Separate frontend classes in modules
+- Use ES6 
+
+# Known Bugs
+
+LastFM API behaves weirdly with pagination. From my debugging, it looks like on every even page (2, 4, 6...) the API returns the results results from this page and the previous one aggregated, with twice the size specified at call time. 
+
+As a workaround, whenever the backend identifies that a page contains more results than it should, it slices the last 5 items and return them instead.
+
