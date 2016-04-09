@@ -82,7 +82,7 @@ class LastFmClientTest extends TestCase
       $transaction = $this->request_history[0];
       $request = $transaction['request'];
 
-      $this->assertEquals($request->getUri()->getQuery(), 'limit=5&api_key=mocked&method=artist.getTopTracks&mbid=db36a76f-4cdf-43ac-8cd0-5e48092d2bae&page=2');
+      $this->assertEquals($request->getUri()->getQuery(), 'limit=10&api_key=mocked&method=artist.getTopTracks&mbid=db36a76f-4cdf-43ac-8cd0-5e48092d2bae&page=2');
     }
 
     /**
@@ -102,7 +102,7 @@ class LastFmClientTest extends TestCase
       $transaction = $this->request_history[0];
       $request = $transaction['request'];
 
-      $this->assertEquals($request->getUri()->getQuery(), 'limit=5&api_key=mocked&method=artist.getTopTracks&mbid=db36a76f-4cdf-43ac-8cd0-5e48092d2bae&page=1');
+      $this->assertEquals($request->getUri()->getQuery(), 'limit=10&api_key=mocked&method=artist.getTopTracks&mbid=db36a76f-4cdf-43ac-8cd0-5e48092d2bae&page=1');
     }
 
     /**

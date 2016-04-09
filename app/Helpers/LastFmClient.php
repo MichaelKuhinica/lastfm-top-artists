@@ -64,10 +64,11 @@ class LastFmClient implements LastFmClientContract
         'method' => 'artist.getTopTracks',
         'mbid' => $artist_mbid,
         'page' => $page,
+        'limit' => 10
       ])
     ]);
     $tracks = new \SimpleXMLElement($response->getBody()->getContents());
-    return $this->normalizeResults($tracks, 'toptracks', 'track');
+    return $tracks;
   }
 
   private function normalizeResults($col, $col_root, $col_attr) {
