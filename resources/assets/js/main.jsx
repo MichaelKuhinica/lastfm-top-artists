@@ -5,6 +5,7 @@ var Router = ReactRouter.Router;
 var Route = ReactRouter.Route;
 var browserHistory = ReactRouter.browserHistory;
 var Link = ReactRouter.Link;
+var Loader = require('react-loader');
 
 var FilterContainer = React.createClass({
   render: function() {
@@ -58,7 +59,8 @@ var ArtistsList = React.createClass({
     return {
       data: [],
       current: this.props.params.page || 1,
-      total: 0
+      total: 0,
+      loaded: false
     };
   },
   componentDidMount: function() {
@@ -83,7 +85,8 @@ var ArtistsList = React.createClass({
         success: function(data) {
           this.setState({
             data: data.topartists.artist,
-            total: data.topartists['@attributes'].total
+            total: data.topartists['@attributes'].total,
+            loaded: true
           });
         }.bind(this),
         error: function(xhr, status, err) {
@@ -91,6 +94,7 @@ var ArtistsList = React.createClass({
           if(xhr.responseJSON && xhr.responseJSON.error) {
             errorText = xhr.responseJSON.error;
           }
+          this.setState({loaded: true});
           alert('Error loading artists: '+errorText);
         }.bind(this)
       });
@@ -104,16 +108,18 @@ var ArtistsList = React.createClass({
     });
     return(
       <div className="artistsList">
-        <div className="row">
-          <div className="col-md-12 artists-list">
-            {artists}
+        <Loader loaded={this.state.loaded}>
+          <div className="row">
+            <div className="col-md-12 artists-list">
+              {artists}
+            </div>
           </div>
-        </div>
-        <div className="row paginate">
-          <div className="col-md-6 col-md-offset-4">
-            <Pagination baseUrl={`/artists/${this.props.params.country}`} currentPage={this.state.current} perPage="5" totalRecords={this.state.total} />
+          <div className="row paginate">
+            <div className="col-md-6 col-md-offset-4">
+              <Pagination baseUrl={`/artists/${this.props.params.country}`} currentPage={this.state.current} perPage="5" totalRecords={this.state.total} />
+            </div>
           </div>
-        </div>
+        </Loader>
       </div>
     );
   }

@@ -12,6 +12,7 @@
     "laravel-elixir": "^5.0.0",
     "react": "^15.0.0",
     "react-dom": "^15.0.0",
+    "react-loader": "MichaelKuhinica/react-loader",
     "react-router": "^2.0.1",
     "react-typeahead": "^1.1.8"
   }
