@@ -284,23 +284,36 @@ var TracksList = React.createClass({
     }
     return '';
   },
+  previousPage: function() {
+    browserHistory.goBack();
+  },
   render: function() {
     var tracks = this.state.data.map(function(track) {
       return(
         <TrackView key={track.mbid} name={track.name} />
       );
     });
+    var boundClick = this.previousPage;
     return (
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Top Songs by {this.getArtistName()}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {tracks}
-        </tbody>
-      </table>
+      <div className="tracksList">
+        <div className="row">
+          <a onClick={boundClick} href="#">
+            Back
+          </a>
+        </div>
+        <div className="row">
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Top Songs by {this.getArtistName()}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {tracks}
+            </tbody>
+          </table>
+        </div>
+      </div>
     )
   }
 });
