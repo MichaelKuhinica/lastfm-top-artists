@@ -4,6 +4,7 @@ var ReactRouter = require('react-router');
 var Router = ReactRouter.Router;
 var Route = ReactRouter.Route;
 var browserHistory = ReactRouter.browserHistory;
+var Link = ReactRouter.Link;
 
 var FilterContainer = React.createClass({
   render: function() {
@@ -46,9 +47,7 @@ var CountryFilter = React.createClass({
             </form>
           </div>
         </div>
-        <div className="row">
-          {this.props.children}
-        </div>
+        {this.props.children}
       </div>
    );
   }
@@ -56,7 +55,11 @@ var CountryFilter = React.createClass({
 
 var ArtistsList = React.createClass({
   getInitialState: function() {
-    return {data: []};
+    return {
+      data: [],
+      current: this.props.params.page || 1,
+      total: 0
+    };
   },
   componentDidMount: function() {
     //TODO use promise
@@ -65,6 +68,7 @@ var ArtistsList = React.createClass({
   componentWillReceiveProps: function(nextProps) {
     //TODO use promise
     this.loadArtists(nextProps);
+    this.setState({current: nextProps.params.page});
   },
   loadArtists: function(props) {
     if(props.params.country) {
@@ -77,7 +81,10 @@ var ArtistsList = React.createClass({
         dataType: 'json',
         cache: true,
         success: function(data) {
-          this.setState({data: data.topartists.artist});
+          this.setState({
+            data: data.topartists.artist,
+            total: data.topartists['@attributes'].total
+          });
         }.bind(this),
         error: function(xhr, status, err) {
           let errorText = err.toString();
@@ -96,9 +103,115 @@ var ArtistsList = React.createClass({
       );
     });
     return(
-      <div className="col-md-12 artists-list">
-        {artists}
+      <div className="artistsList">
+        <div className="row">
+          <div className="col-md-12 artists-list">
+            {artists}
+          </div>
+        </div>
+        <div className="row paginate">
+          <Pagination baseUrl={`/artists/${this.props.params.country}`} currentPage={this.state.current} perPage="5" totalRecords={this.state.total} />
+        </div>
       </div>
+    );
+  }
+});
+
+var Pagination = React.createClass({
+  range: function(start, stop) {
+    if (arguments.length <= 1) {
+      stop = start || 0;
+      start = 0;
+    }
+
+    var length = Math.max(stop - start, 0);
+    var idx = 0;
+    var arr = new Array(length);
+
+    while(idx < length) {
+      arr[idx++] = start;
+      start += 1;
+    }
+
+    return arr;
+  },
+  getPageRange: function() {
+		var displayCount = 5;
+    var page = this.props.currentPage;
+
+    // Check position of cursor, zero based
+    var idx = (page - 1) % displayCount;
+
+    // list should not move if cursor isn't passed this part of the range
+    var start = page - idx;
+
+    let numPages = Math.floor(parseInt(this.props.totalRecords)/parseInt(this.props.perPage));
+    // remaining pages
+    var remaining = numPages - page;
+
+    // Don't move cursor right if the range will exceed the number of pages
+    // in other words, we've reached the home stretch
+    if (page > displayCount && remaining < displayCount) {
+      // add 1 due to the implementation of `range`
+      start = numPages - displayCount + 1;
+    }
+
+    return this.range(start, start + displayCount);
+  },
+  renderPage: function(n, i) {
+    var cls = this.props.currentPage == n ? 'active' : '';
+    return (
+      <li key={i} className={cls}>
+        <Link to={`${this.props.baseUrl}/${n}`}>
+          {n}
+        </Link>
+      </li>
+    );
+  },
+  render: function() {
+    if(this.props.currentPage == 1) {
+      var firstPageLink = (
+        <li className="disabled">
+          <span>
+            <span aria-hidden="true">&laquo;</span>
+          </span>
+        </li>
+      );
+    } else {
+      var firstPageLink = (
+        <li>
+          <Link to={`${this.props.baseUrl}/${parseInt(this.props.currentPage)-1}`}>
+            <span aria-hidden="true">&laquo;</span>
+          </Link>
+        </li>
+      );
+    }
+    let lastPage = Math.floor(parseInt(this.props.totalRecords)/parseInt(this.props.perPage));
+    if(this.props.currentPage >= lastPage) {
+      var lastPageLink = (
+        <li className="disabled">
+          <span>
+            <span aria-hidden="true">&raquo;</span>
+          </span>
+        </li>
+      );
+    } else {
+      var lastPageLink = (
+        <li>
+          <Link to={`${this.props.baseUrl}/${parseInt(this.props.currentPage)+1}`}>
+            <span aria-hidden="true">&raquo;</span>
+          </Link>
+        </li>
+      );
+    }
+    return (
+<nav>
+  <ul className="pagination">
+    {firstPageLink}
+    {this.getPageRange().map(this.renderPage, this)}
+    {lastPageLink}
+  </ul>
+</nav>
     );
   }
 });
