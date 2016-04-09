@@ -58,23 +58,31 @@ var ArtistsList = React.createClass({
     return {data: []};
   },
   componentDidMount: function() {
-    if(this.props.params.country) {
-      //TODO use promise
-      this.loadArtists(this.props.params.country);
-    }
+    //TODO use promise
+    this.loadArtists(this.props);
   },
-  loadArtists: function(country) {
-    $.ajax({
-      url: '/api/v1/artists/top/'+country,
-      dataType: 'json',
-      cache: true,
-      success: function(data) {
-        this.setState({data: data.topartists.artist});
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      }.bind(this)
-    });
+  componentWillReceiveProps: function(nextProps) {
+    //TODO use promise
+    this.loadArtists(nextProps);
+  },
+  loadArtists: function(props) {
+    if(props.params.country) {
+      $.ajax({
+        url: '/api/v1/artists/top/'+props.params.country,
+        dataType: 'json',
+        cache: true,
+        success: function(data) {
+          this.setState({data: data.topartists.artist});
+        }.bind(this),
+        error: function(xhr, status, err) {
+          let errorText = err.toString();
+          if(xhr.responseJSON && xhr.responseJSON.error) {
+            errorText = xhr.responseJSON.error;
+          }
+          alert('Error loading artists: '+errorText);
+        }.bind(this)
+      });
+    }
   },
   render: function() {
     var artists = this.state.data.map(function(artist) {
