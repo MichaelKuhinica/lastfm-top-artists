@@ -36,6 +36,7 @@ var CountryFilter = React.createClass({
                   className="form-control"
                   type="text"
                   placeholder="Search country by name"
+                  defaultValue={this.props.params.country}
                   onChange={this.handleCountryChange}
                 />
               </div>
