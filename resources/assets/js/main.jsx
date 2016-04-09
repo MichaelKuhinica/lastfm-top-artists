@@ -99,7 +99,7 @@ var ArtistsList = React.createClass({
   render: function() {
     var artists = this.state.data.map(function(artist) {
       return(
-        <ArtistView key={artist.mbid} name={artist.name} thumbnail={artist.image[3]} />
+        <ArtistView key={artist.mbid} name={artist.name} mbid={artist.mbid} thumbnail={artist.image[3]} />
       );
     });
     return(
@@ -224,10 +224,84 @@ var ArtistView = React.createClass({
           <img src={this.props.thumbnail} alt={this.props.name} />
         </div>
         <div className="col-md-9 artist-name">
-          {this.props.name}
+          <Link to={`/tracks/${this.props.mbid}`}>
+            {this.props.name}
+          </Link>
         </div>
       </div>
     );
+  }
+});
+
+var TrackView = React.createClass({
+  render: function() {
+    return(
+      <tr>
+        <td>
+          {this.props.name}
+        </td>
+      </tr>
+    );
+  }
+});
+
+var TracksList = React.createClass({
+  getInitialState: function() {
+    return {
+      data: []
+    }
+  },
+  componentDidMount: function() {
+    this.loadTracks();
+  },
+  loadTracks: function() {
+    let endpointUrl = '/api/v1/tracks/top/'+this.props.params.artist;
+    if(this.props.params.page) {
+      endpointUrl += '/?page='+this.props.params.page;
+    }
+    $.ajax({
+      url: endpointUrl,
+      dataType: 'json',
+      cache: true,
+      success: function(data) {
+        this.setState({
+          data: data.toptracks.track,
+          total: data.toptracks['@attributes'].total,
+        });
+      }.bind(this),
+      error: function(xhr, status, err) {
+        let errorText = err.toString();
+        if(xhr.responseJSON && xhr.responseJSON.error) {
+          errorText = xhr.responseJSON.error;
+        }
+        alert('Error loading tracks: '+errorText);
+      }.bind(this)
+    });
+  },
+  getArtistName: function() {
+    if(this.state.data.length > 0 && this.state.data[0].artist) {
+      return this.state.data[0].artist.name;
+    }
+    return '';
+  },
+  render: function() {
+    var tracks = this.state.data.map(function(track) {
+      return(
+        <TrackView key={track.mbid} name={track.name} />
+      );
+    });
+    return (
+      <table className="table">
+        <thead>
+          <tr>
+            <th>Top Songs by {this.getArtistName()}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {tracks}
+        </tbody>
+      </table>
+    )
   }
 });
 
@@ -236,5 +310,6 @@ ReactDOM.render((
     <Route path="/" component={CountryFilter}>
       <Route path="/artists/:country(/:page)" component={ArtistsList}/>
     </Route>
+    <Route path="/tracks/:artist(/:page)" component={TracksList} />
   </Router>
 ), document.getElementById('app'));
