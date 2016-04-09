@@ -28,7 +28,7 @@ var CountryFilter = React.createClass({
     return (
       <div className="CountryFilter">
         <div className="row">
-          <div className="col-md-6 col-md-offset-3">
+          <div className="col-md-6 col-md-offset-3 col-xs-6">
             <form onSubmit={this.handleSubmit}>
               <div className="form-group col-md-9">
                 <label className="sr-only" for="country-filter">Search country by name</label>
@@ -41,7 +41,7 @@ var CountryFilter = React.createClass({
                   onChange={this.handleCountryChange}
                 />
               </div>
-              <div className="col-md-3">
+              <div className="col-md-3 col-xs-3">
                 <button type="submit" className="btn btn-default">Search</button>
               </div>
             </form>
@@ -110,7 +110,9 @@ var ArtistsList = React.createClass({
           </div>
         </div>
         <div className="row paginate">
-          <Pagination baseUrl={`/artists/${this.props.params.country}`} currentPage={this.state.current} perPage="5" totalRecords={this.state.total} />
+          <div className="col-md-6 col-md-offset-4">
+            <Pagination baseUrl={`/artists/${this.props.params.country}`} currentPage={this.state.current} perPage="5" totalRecords={this.state.total} />
+          </div>
         </div>
       </div>
     );
@@ -220,13 +222,17 @@ var ArtistView = React.createClass({
   render: function() {
     return(
       <div className="row artist-row">
-        <div className="col-md-3 artist-image">
-          <img src={this.props.thumbnail} alt={this.props.name} />
-        </div>
-        <div className="col-md-9 artist-name">
+        <div className="col-md-3 artist-image col-xs-3">
           <Link to={`/tracks/${this.props.mbid}`}>
-            {this.props.name}
+            <img src={this.props.thumbnail} alt={this.props.name} className="img-responsive" />
           </Link>
+        </div>
+        <div className="col-md-9 artist-name col-xs-9">
+          <h2>
+            <Link to={`/tracks/${this.props.mbid}`}>
+              {this.props.name}
+            </Link>
+          </h2>
         </div>
       </div>
     );
