@@ -70,7 +70,7 @@ var ArtistsList = React.createClass({
   componentWillReceiveProps: function(nextProps) {
     //TODO use promise
     this.loadArtists(nextProps);
-    this.setState({current: nextProps.params.page});
+    this.setState({current: nextProps.params.page || 1});
   },
   loadArtists: function(props) {
     if(props.params.country) {
