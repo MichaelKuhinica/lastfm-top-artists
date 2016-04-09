@@ -11,11 +11,6 @@
 |
 */
 
-// View with search box and button
-Route::get('/', function () {
-    return view('welcome');
-});
-
 //Stub api endpoints
 Route::group(['namespace' => 'Api\V1', 'prefix' => 'api/v1'], function()
 {
@@ -25,3 +20,7 @@ Route::group(['namespace' => 'Api\V1', 'prefix' => 'api/v1'], function()
   // JSON api endpoint to list the top tracks of a specified artist
   Route::get('/tracks/top/{artist}', 'TrackController@topByArtist');
 });
+
+Route::any('{path?}', function () {
+    return view('welcome');
+})->where('path', '.+');

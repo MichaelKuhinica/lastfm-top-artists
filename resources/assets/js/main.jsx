@@ -3,7 +3,7 @@ var ReactDOM = require('react-dom');
 var ReactRouter = require('react-router');
 var Router = ReactRouter.Router;
 var Route = ReactRouter.Route;
-var hashHistory = ReactRouter.hashHistory;
+var browserHistory = ReactRouter.browserHistory;
 
 // console.log(countries.getNames());
 var FilterContainer = React.createClass({
@@ -22,7 +22,7 @@ var CountryFilter = React.createClass({
   },
   handleSubmit: function(e) {
     e.preventDefault();
-    hashHistory.push('/artists/'+this.state.country);
+    browserHistory.push('/artists/'+this.state.country);
   },
   render: function() {
     return (
@@ -109,7 +109,7 @@ var ArtistView = React.createClass({
 });
 
 ReactDOM.render((
-  <Router history={hashHistory}>
+  <Router history={browserHistory}>
     <Route path="/" component={CountryFilter}>
       <Route path="/artists/:country" component={ArtistsList}/>
     </Route>
